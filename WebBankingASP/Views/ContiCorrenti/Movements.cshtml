@@ -1,0 +1,37 @@
+﻿@model WebBankingASP.ViewModels.AccountMovementsListViewModel
+@{
+    ViewBag.Title = "Movimenti Conto";
+}
+
+<h2>@Model.Titolo</h2>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">date</th>
+            <th scope="col">fk_bankAccount</th>
+            <th scope="col">in</th>
+            <th scope="col">out</th>
+            <th scope="col">description</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model.listaMovimenti)
+        {
+        <tr class="table-info">
+            <td>@Html.DisplayFor(modelItem => item.id)</td>
+            <td>@Html.DisplayFor(modelItem => item.date)</td>
+            <td>@Html.DisplayFor(modelItem => item.fk_bankAccount)</td>
+            <td>@Html.DisplayFor(modelItem => item.@in)</td>
+            <td>@Html.DisplayFor(modelItem => item.@out)</td>
+            <td>@Html.DisplayFor(modelItem => item.description)</td>
+            <td>
+                <button type="button" class="btn btn-outline-info">@Html.ActionLink("Dettaglio conto", "Details", new { id = item.fk_bankAccount })</button>
+                <button type="button" class="btn btn-outline-info">@Html.ActionLink("Dettaglio movimento conto", "Movement", new { id1 = item.fk_bankAccount, id2 = item.id })</button>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

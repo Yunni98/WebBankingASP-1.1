@@ -1,0 +1,71 @@
+﻿@model WebBankingASP.ViewModels.BankAccountsListViewModel
+@{
+    ViewBag.Title = "Conti Correnti";
+}
+
+<h2>@Model.Titolo</h2>
+
+@if (TempData["Banchiere View"].ToString() == "true")
+{
+    <button type="button" class="btn btn-success">@Html.ActionLink("Create new", "CreateNew")</button>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Iban</th>
+                <th scope="col">Fk_user</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var c in Model.listaAccount)
+            {
+                <tr class="table-info">
+                    <td>@c.id</td>
+                    <td>@c.iban</td>
+                    <td>@c.fk_user</td>
+                    <td>
+                        <button type="button" class="btn btn-outline-info">@Html.ActionLink("Dettaglio conto", "Details", new { id = c.id })</button>
+                        <button type="button" class="btn btn-outline-info">@Html.ActionLink("Modifica conto", "EditView", new { id = c.id })</button>
+                        <button type="button" class="btn btn-outline-info">@Html.ActionLink("Elimina conto", "Delete", new { id = c.id })</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p>
+        <button type="button" class="btn btn-outline-info">@Html.ActionLink("Logout", "Index_Logout", "Account")</button>
+    </p>
+}
+else
+{
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Iban</th>
+                <th scope="col">Fk_user</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var c in Model.listaAccount)
+            {
+                <tr class="table-info">
+                    <td>@c.id</td>
+                    <td>@c.iban</td>
+                    <td>@c.fk_user</td>
+                    <td>
+                        <button type="button" class="btn btn-outline-info">@Html.ActionLink("Details", "Details", new { id = c.id })</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p>
+        <button type="button" class="btn btn-outline-info">@Html.ActionLink("Logout", "Index_Logout", "Account")</button>
+    </p>
+}
+

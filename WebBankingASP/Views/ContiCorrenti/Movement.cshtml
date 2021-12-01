@@ -1,0 +1,35 @@
+﻿@model WebBankingASP.ViewModels.AccountMovementsDetailViewModel
+
+@{
+    ViewBag.Title = "Dettaglio Movimento";
+}
+
+<h2>@Model.Titolo</h2>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">date</th>
+            <th scope="col">fk_bankAccount</th>
+            <th scope="col">in</th>
+            <th scope="col">out</th>
+            <th scope="col">description</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr class="table-info">
+            <td>@Html.DisplayFor(modelItem => Model.movimentiAccount.id)</td>
+            <td>@Html.DisplayFor(modelItem => Model.movimentiAccount.date)</td>
+            <td>@Html.DisplayFor(modelItem => Model.movimentiAccount.fk_bankAccount)</td>
+            <td>@Html.DisplayFor(modelItem => Model.movimentiAccount.@in)</td>
+            <td>@Html.DisplayFor(modelItem => Model.movimentiAccount.@out)</td>
+            <td>@Html.DisplayFor(modelItem => Model.movimentiAccount.description)</td>
+            <td>
+                <button type="button" class="btn btn-outline-info">@Html.ActionLink("Lista movimenti conto", "Movements", new { id = Model.movimentiAccount.fk_bankAccount })</button>
+            </td>
+        </tr>
+        
+    </tbody>
+</table>

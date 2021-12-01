@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="WebBankingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AccountMovements">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="date" Type="datetime" Nullable="false" />
+          <Property Name="fk_bankAccount" Type="int" Nullable="false" />
+          <Property Name="in" Type="float" />
+          <Property Name="out" Type="float" />
+          <Property Name="description" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="BankAccounts">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="iban" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="fk_user" Type="int" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="full_name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="is_banker" Type="bit" Nullable="false" />
+          <Property Name="last_login" Type="datetime" />
+          <Property Name="last_logout" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_AccountMovements_BankAccounts">
+          <End Role="BankAccounts" Type="Self.BankAccounts" Multiplicity="1" />
+          <End Role="AccountMovements" Type="Self.AccountMovements" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BankAccounts">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="AccountMovements">
+              <PropertyRef Name="fk_bankAccount" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BankAccounts_BankAccounts">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="BankAccounts" Type="Self.BankAccounts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="BankAccounts">
+              <PropertyRef Name="fk_user" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="WebBankingModelStoreContainer">
+          <EntitySet Name="AccountMovements" EntityType="Self.AccountMovements" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BankAccounts" EntityType="Self.BankAccounts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_AccountMovements_BankAccounts" Association="Self.FK_AccountMovements_BankAccounts">
+            <End Role="BankAccounts" EntitySet="BankAccounts" />
+            <End Role="AccountMovements" EntitySet="AccountMovements" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BankAccounts_BankAccounts" Association="Self.FK_BankAccounts_BankAccounts">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="BankAccounts" EntitySet="BankAccounts" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="WebBankingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AccountMovement">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fk_bankAccount" Type="Int32" Nullable="false" />
+          <Property Name="in" Type="Double" />
+          <Property Name="out" Type="Double" />
+          <Property Name="description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="BankAccount" Relationship="Self.FK_AccountMovements_BankAccounts" FromRole="AccountMovements" ToRole="BankAccounts" />
+        </EntityType>
+        <EntityType Name="BankAccount">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="iban" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="fk_user" Type="Int32" />
+          <NavigationProperty Name="AccountMovements" Relationship="Self.FK_AccountMovements_BankAccounts" FromRole="BankAccounts" ToRole="AccountMovements" />
+          <NavigationProperty Name="User" Relationship="Self.FK_BankAccounts_BankAccounts" FromRole="BankAccounts" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="full_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="is_banker" Type="Boolean" Nullable="false" />
+          <Property Name="last_login" Type="DateTime" Precision="3" />
+          <Property Name="last_logout" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="BankAccounts" Relationship="Self.FK_BankAccounts_BankAccounts" FromRole="Users" ToRole="BankAccounts" />
+        </EntityType>
+        <Association Name="FK_AccountMovements_BankAccounts">
+          <End Role="BankAccounts" Type="Self.BankAccount" Multiplicity="1" />
+          <End Role="AccountMovements" Type="Self.AccountMovement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BankAccounts">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="AccountMovements">
+              <PropertyRef Name="fk_bankAccount" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BankAccounts_BankAccounts">
+          <End Role="Users" Type="Self.User" Multiplicity="0..1" />
+          <End Role="BankAccounts" Type="Self.BankAccount" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="BankAccounts">
+              <PropertyRef Name="fk_user" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="WebBankingEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AccountMovements" EntityType="Self.AccountMovement" />
+          <EntitySet Name="BankAccounts" EntityType="Self.BankAccount" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_AccountMovements_BankAccounts" Association="Self.FK_AccountMovements_BankAccounts">
+            <End Role="BankAccounts" EntitySet="BankAccounts" />
+            <End Role="AccountMovements" EntitySet="AccountMovements" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BankAccounts_BankAccounts" Association="Self.FK_BankAccounts_BankAccounts">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="BankAccounts" EntitySet="BankAccounts" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="WebBankingModelStoreContainer" CdmEntityContainer="WebBankingEntities">
+          <EntitySetMapping Name="AccountMovements">
+            <EntityTypeMapping TypeName="WebBankingModel.AccountMovement">
+              <MappingFragment StoreEntitySet="AccountMovements">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="fk_bankAccount" ColumnName="fk_bankAccount" />
+                <ScalarProperty Name="in" ColumnName="in" />
+                <ScalarProperty Name="out" ColumnName="out" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BankAccounts">
+            <EntityTypeMapping TypeName="WebBankingModel.BankAccount">
+              <MappingFragment StoreEntitySet="BankAccounts">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="iban" ColumnName="iban" />
+                <ScalarProperty Name="fk_user" ColumnName="fk_user" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="WebBankingModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="full_name" ColumnName="full_name" />
+                <ScalarProperty Name="is_banker" ColumnName="is_banker" />
+                <ScalarProperty Name="last_login" ColumnName="last_login" />
+                <ScalarProperty Name="last_logout" ColumnName="last_logout" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Nessuno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

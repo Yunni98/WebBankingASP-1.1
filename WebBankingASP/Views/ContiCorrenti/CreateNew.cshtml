@@ -1,0 +1,46 @@
+﻿@model WebBankingASP.Models.ContoData
+
+@{
+    ViewBag.Title = "Crea Conto";
+}
+
+<h2>Nuovo Conto</h2>
+
+@using (Html.BeginForm("Create", "ContiCorrenti", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <h4>Inserire Iban del destinatario e importo da inviare</h4>
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Iban, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Iban, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Iban, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.User, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.User, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.User, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Invia" class="btn btn-default" />
+            </div>
+        </div>
+
+    </div>
+
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+}
+
+<div>
+    @Html.ActionLink("Torna alla lista Conti", "Index")
+</div>

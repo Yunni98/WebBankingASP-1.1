@@ -1,0 +1,31 @@
+﻿@model WebBankingASP.ViewModels.BankAccountDetailViewModel
+
+@{
+    ViewBag.Title = "Dettaglio conto";
+}
+
+<h2>@Model.Title</h2>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">iban</th>
+            <th scope="col">fk_user</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr class="table-info">
+            <td>@Html.DisplayFor(modelItem => Model.bankAccount.id)</td>
+            <td>@Html.DisplayFor(modelItem => Model.bankAccount.iban)</td>
+            <td>@Html.DisplayFor(modelItem => Model.bankAccount.fk_user)</td>
+            <td>
+                <button type="button" class="btn btn-info">@Html.ActionLink("Lista Conti", "Index")</button>
+                <button type="button" class="btn btn-outline-info">@Html.ActionLink("Lista Movementi", "Movements", new { id = Model.bankAccount.id })</button>
+                <button type="button" class="btn btn-outline-info">@Html.ActionLink("Bonifico", "BonificoView", new { id = Model.bankAccount.id })</button>
+            </td>
+        </tr>
+
+    </tbody>
+</table>
